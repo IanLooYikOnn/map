@@ -3,9 +3,24 @@
 int i, j;
 int x, y;
 int grid[6][6];
+int steps;
+int newX, newY;
 
-int moveX(int optionX, int x, int y, int grid[6][6]) {}
-int moveY(int optionY, int x, int y, int grid[6][6]) {}
+void printGrid() {
+    for (i = 5; i >= 0; i--) {
+        for (j = 0; j < 6; j++) {
+            printf("%c ", grid[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+void updateGrid() {
+    grid[y][x] = '.';
+    x = newX;
+    y = newY;
+    grid[y][x] = 'X';
+}
 
 void startPosition() {
     while (1) {
@@ -16,16 +31,10 @@ void startPosition() {
             continue;
         }
         else {
-            grid[x][y] = 'X';
+            grid[y][x] = 'X';
         }
         
-        // Print updated grid with row labels (bottom-left is (0,0))
-        for (i = 5; i >= 0; i--) {
-            for (j = 0; j < 6; j++) {
-                printf("%c ", grid[i][j]);
-            }
-            printf("\n");
-        }
+        printGrid();
         printf("Position: (%d,%d)\n", x, y);
         printf("\n");
 
@@ -35,35 +44,120 @@ void startPosition() {
 
 void changePosition() {
     while (1) {
-        int a, b;
         printf("Position: (%d,%d)\n", x, y);
         printf("Enter new position (x,y): ");
-        scanf("%d %d", &a, &b);
-        if (a < 0 || a >= 6 || b < 0 || b >= 6) {
+        scanf("%d %d", &newX, &newY);
+        if (newX < 0 || newX >= 6 || newY < 0 || newY >= 6) {
             printf("Invalid input. Please enter valid coordinates (0-5).\n");
             continue;
         }
         else {
-            // Clear previous position
-            grid[x][y] = '.';
-            // Set new position
-            x = a;
-            y = b;
-            grid[x][y] = 'X';
+            updateGrid();
         }
         
         // Print updated grid with row labels (bottom-left is (0,0))
-        for (i = 5; i >= 0; i--) {
-            for (j = 0; j < 6; j++) {
-                printf("%c ", grid[i][j]);
-            }
-            printf("\n");
-        }
+        printGrid();
         printf("Position: (%d,%d)\n", x, y);
         printf("\n");
 
         break;
     }
+}
+
+int moveX(int optionX, int x, int y, int grid[6][6]) {
+    if (optionX == 5) {
+        return 0;
+    }
+
+    printf("Enter number of steps: ");
+    scanf("%d", &steps);
+
+    if (steps <= 0) {
+        printf("Invalid steps. Please enter a positive number.\n");
+        return 0;
+    }
+
+    switch (optionX) {
+        case 1:
+            newX = x - steps;
+            newY = y + steps;
+            break;
+        case 2:
+            newX = x + steps;
+            newY = y + steps;
+            break;
+        case 3:
+            newX = x - steps;
+            newY = y - steps;
+            break;
+        case 4:
+            newX = x + steps;
+            newY = y - steps;
+            break;
+        default:
+            printf("Invalid option.\n");
+            return 0;
+    }
+
+    if (newX < 0 || newX >= 6 || newY < 0 || newY >= 6) {
+        printf("Invalid move. Position out of bounds.\n");
+        return 0;
+    }
+
+    updateGrid();
+
+    printGrid();
+    printf("Position: (%d,%d)\n", x, y);
+    printf("\n");
+    return 1;
+}
+
+int moveY(int optionY, int x, int y, int grid[6][6]) {
+    if (optionY == 5) {
+        return 0;
+    }
+
+    printf("Enter number of steps: ");
+    scanf("%d", &steps);
+
+    if (steps <= 0) {
+        printf("Invalid steps. Please enter a positive number.\n");
+        return 0;
+    }
+
+    switch (optionY) {
+        case 1:
+            newX = x;
+            newY = y + steps;
+            break;
+        case 2:
+            newX = x;
+            newY = y + steps;
+            break;
+        case 3:
+            newX = x - steps;
+            newY = y;
+            break;
+        case 4:
+            newX = x + steps;
+            newY = y;
+            break;
+        default:
+            printf("Invalid option.\n");
+            return 0;
+    }
+
+    if (newX < 0 || newX >= 6 || newY < 0 || newY >= 6) {
+        printf("Invalid move. Position out of bounds.\n");
+        return 0;
+    }
+
+    updateGrid();
+
+    printGrid();
+    printf("Position: (%d,%d)\n", x, y);
+    printf("\n");
+    return 1;
 }
 
 void optionX() {
@@ -93,7 +187,7 @@ void optionY() {
     printf("Select option (1/2/3/4/5): ");
     scanf("%d", &optionY);
 
-    moveY(optionX, x, y, grid);
+    moveY(optionY, x, y, grid);
 }
 
 int main() {
@@ -103,13 +197,7 @@ int main() {
         }
     }
     
-    // Print initial grid with row labels (bottom-left is (0,0))
-    for (i = 5; i >= 0; i--) {
-        for (j = 0; j < 6; j++) {
-            printf("%c ", grid[i][j]);
-        }
-        printf("\n");
-    }
+    printGrid();
 
     startPosition();
 
