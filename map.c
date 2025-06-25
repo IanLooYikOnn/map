@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <conio.h>
 
 int i, j;
 int x, y;
@@ -33,11 +35,6 @@ void startPosition() {
         else {
             grid[y][x] = 'X';
         }
-        
-        printGrid();
-        printf("Position: (%d,%d)\n", x, y);
-        printf("\n");
-
         break;
     }
 }
@@ -54,12 +51,6 @@ void changePosition() {
         else {
             updateGrid();
         }
-        
-        // Print updated grid with row labels (bottom-left is (0,0))
-        printGrid();
-        printf("Position: (%d,%d)\n", x, y);
-        printf("\n");
-
         break;
     }
 }
@@ -106,9 +97,6 @@ int moveX(int optionX, int x, int y, int grid[6][6]) {
 
     updateGrid();
 
-    printGrid();
-    printf("Position: (%d,%d)\n", x, y);
-    printf("\n");
     return 1;
 }
 
@@ -154,9 +142,6 @@ int moveY(int optionY, int x, int y, int grid[6][6]) {
 
     updateGrid();
 
-    printGrid();
-    printf("Position: (%d,%d)\n", x, y);
-    printf("\n");
     return 1;
 }
 
@@ -190,6 +175,10 @@ void optionY() {
     moveY(optionY, x, y, grid);
 }
 
+void clrscr() {
+    system("@cls||clear");
+}
+
 int main() {
     for (i = 5; i >= 0; i--) {
         for (j = 0; j < 6; j++) {
@@ -203,13 +192,17 @@ int main() {
 
     int option;
     while (1) {
+        printGrid();
+        printf("Position: (%d,%d)\n", x, y);
+        printf("\n");
 
         printf("======== Options ========\n");
         printf("1. Move X\n");
         printf("2. Move Y\n");
         printf("3. Change Position\n");
-        printf("4. Exit\n");
-        printf("Select option (1/2/3/4): ");
+        printf("4. Clear Screen\n");
+        printf("5. Exit\n");
+        printf("Select option (1/2/3/4/5): ");
         scanf("%d", &option);
         
         switch (option) {
@@ -223,6 +216,9 @@ int main() {
                 changePosition();
                 continue;
             case 4:
+                clrscr();
+                continue;
+            case 5:
                 return 0;
             default:
                 printf("Invalid option. Please try again.\n");
